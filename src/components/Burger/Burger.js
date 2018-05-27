@@ -3,14 +3,18 @@ import BurgerIngredient from './BurgerIngredients/BurgerIngredient'
 import classes from './Burger.css';
 
 const burger = (props) => {
+    const ingredientsArr = [];
+
+    props.ingredients.forEach(element => {
+        for ( let i = 0; i < element.amount; i++ ) {
+            ingredientsArr.push(<BurgerIngredient key={ element.name + i } type = { element.name } />);
+        }
+    });
+
     return(
         <div className={classes.Burger}>
             <BurgerIngredient type="bun-top"/>
-            <BurgerIngredient type="lettuce"/>
-            <BurgerIngredient type="tomato"/>
-            <BurgerIngredient type="bacon"/>
-            <BurgerIngredient type="cheese"/>
-            <BurgerIngredient type="patty"/>
+            {ingredientsArr}
             <BurgerIngredient type="bun-bottom"/>
         </div>
     );

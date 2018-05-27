@@ -1,0 +1,10 @@
+.IngredientController {
+    display: flex;
+    margin: 2px;
+}
+
+.IngredientController button {
+    display: block;
+    width: 8px;
+    outline: none;
+}
