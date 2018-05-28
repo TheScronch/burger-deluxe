@@ -4,9 +4,14 @@ import classes from './IngredientController.css';
 
 const ingredientController = (props) => (
     <div className={classes.IngredientController}>
-        <p>{props.name}</p>
-        <button>-</button>
-        <button onClick={props.added}>+</button>
+        <label>{props.name}</label>
+        <button 
+            className={classes.Remove} 
+            onClick={props.removed}
+            disabled={props.disabled}>-</button>
+        <button 
+            className={classes.Add} 
+            onClick={props.added}>+</button>
     </div>
 );
 

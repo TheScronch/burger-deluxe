@@ -13,11 +13,13 @@ const ingredientControllers = [
 
 const ingredientMenu = (props) => (
     <div className={classes.IngredientMenu}>
-        {ingredientControllers.map( ingredentCtrl =>(
+        {ingredientControllers.map( (ingredentCtrl, index) =>(
             <IngredientController 
                 name={ingredentCtrl.name} 
                 key={ingredentCtrl.name} 
-                added={() => props.addIngredient(ingredentCtrl.type)} />
+                added={() => props.addAmount(ingredentCtrl.type)} 
+                removed={() => props.removeAmount(ingredentCtrl.type)} 
+                disabled={props.disabled[index]}/>
         ))}
     </div>
 );

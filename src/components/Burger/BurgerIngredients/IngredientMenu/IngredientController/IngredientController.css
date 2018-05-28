@@ -1,10 +1,31 @@
 .IngredientController {
     display: flex;
     margin: 2px;
+    height: 24px;
+    margin: 0px 8px;
+    line-height: 24px;
+    vertical-align: center;
 }
 
 .IngredientController button {
-    display: block;
-    width: 8px;
+    height: 24px;
+    width: 24px;
+    color: white;
+    font-size: 1rem;
+    border: none;
+    border-radius: 12px;
+    margin: 0px 2px;
     outline: none;
+}
+
+.Add {
+    background: rgb(0, 153, 255);
+}
+
+.Remove {
+    background: red;
+}
+
+.Remove:disabled {
+    background: gray;
 }
