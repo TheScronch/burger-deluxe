@@ -26,6 +26,10 @@
     background: red;
 }
 
+.Add:disabled {
+    background: rgb(188, 194, 199);
+}
+
 .Remove:disabled {
-    background: gray;
+    background: rgb(202, 189, 189);
 }

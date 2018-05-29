@@ -4,14 +4,6 @@ import IngredientMenu from '../../components/Burger/BurgerIngredients/Ingredient
 
 import classes from './BurgerBuilder.css';
 
-const ingredientCosts = {
-    lettuce: 0.2,
-    tomato: 0.2,
-    bacon: 1.5,
-    cheese: 0.5,
-    patty: 2
-}
-
 class BurgerBuilder extends Component {
     state = {
         ingredients: [
@@ -36,24 +28,21 @@ class BurgerBuilder extends Component {
                 amount: 0
             }
         ],
-        totalCost: 3
+        totalCost: 3,
+        purchaseDisabled: true
     }
 
-    modifyAmount = (type, value) => {
-        const tempCost = this.state.totalCost;
-        let tempIngredients = JSON.parse(JSON.stringify(this.state.ingredients));
+    updatePurchaseState = (tempIngredients) => {
+        let amountTotal = 0;
 
         for ( let i = 0; i < Object.keys(tempIngredients).length; i++ ) {
-            if ( tempIngredients[i].name === type && tempIngredients[i].amount <= 0 )
-            {
-                tempIngredients[i].amount += value;
-                const newCost = tempCost + (ingredientCosts[type] * value);
-                this.setState( {totalCost: newCost, ingredients: tempIngredients} );
-            }
+            amountTotal += tempIngredients[i].amount;
         }
+
+        this.setState( {purchaseDisabled: amountTotal === 0} );
     }
 
-    removeAmount = (type) => {
+    removeAmount = (type, value) => {
         const tempCost = this.state.totalCost;
         let tempIngredients = JSON.parse(JSON.stringify(this.state.ingredients));
 
@@ -61,13 +50,15 @@ class BurgerBuilder extends Component {
             if ( tempIngredients[i].name === type && tempIngredients[i].amount !== 0 )
             {
                 tempIngredients[i].amount -= 1;
-                const newCost = tempCost - ingredientCosts[type];
+                const newCost = tempCost - value;
                 this.setState( {totalCost: newCost, ingredients: tempIngredients} );
             }
         }
+
+        this.updatePurchaseState(tempIngredients);
     }
 
-    addAmount = (type) => {
+    addAmount = (type, value) => {
         const tempCost = this.state.totalCost;
         let tempIngredients = JSON.parse(JSON.stringify(this.state.ingredients));
 
@@ -75,27 +66,38 @@ class BurgerBuilder extends Component {
             if ( tempIngredients[i].name === type && tempIngredients[i].amount < 3 )
             {
                 tempIngredients[i].amount += 1;
-                const newCost = tempCost + ingredientCosts[type];
+                const newCost = tempCost + value;
                 this.setState( {totalCost: newCost, ingredients: tempIngredients} );
             }
         }
+
+        this.updatePurchaseState(tempIngredients);
     }
 
     render () {
-        const disabledRemove = JSON.parse(JSON.stringify(this.state.ingredients));
-        for ( let i = 0; i < Object.keys(disabledRemove).length; i++ ) {
-            disabledRemove[i] = disabledRemove[i].amount <= 0
+        const disableRemove = JSON.parse(JSON.stringify(this.state.ingredients));
+        for ( let i = 0; i < Object.keys(disableRemove).length; i++ ) {
+            disableRemove[i] = disableRemove[i].amount <= 0;
         }
-        console.log(disabledRemove);
+
+        const disableAdd = JSON.parse(JSON.stringify(this.state.ingredients));
+        for ( let i = 0; i < Object.keys(disableAdd).length; i++ ) {
+            disableAdd[i] = disableAdd[i].amount >= 3;
+        }
+
         return (
-            
             <Fragment>
                 <Burger ingredients={this.state.ingredients} />
                 <IngredientMenu 
                     addAmount={this.addAmount} 
                     removeAmount={this.removeAmount} 
-                    disabled={disabledRemove} />
-                    <p className={classes.Price}>Total cost: ${this.state.totalCost.toFixed(2)}</p>
+                    disabledRemove={disableRemove} 
+                    disabledAdd={disableAdd} 
+                    ingredientCosts={this.ingredientCosts}/>
+                <p className={classes.Price}>Total cost: ${this.state.totalCost.toFixed(2)}</p>
+                <button 
+                    disabled={this.state.purchaseDisabled}
+                    className={classes.Order}>Place Order</button>
             </Fragment>
         );
     }
